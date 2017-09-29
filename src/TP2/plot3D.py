@@ -1,7 +1,6 @@
 import matplotlib as mpl
-from mpl_toolkits.mplot3d import Axes3D
-import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 '''
 import csv 
 def plot():  
@@ -18,14 +17,15 @@ def plot():
                     x_list.append(row[1])
                     y_list.append(row[2])
                     z_list.append(row[0])
-                k = k+1 '''
+                k = k+1 
+'''
 
 
 def plot(x_val, y_val, z_val):
     mpl.rcParams['legend.fontsize'] = 10
 
     fig = plt.figure()
-    ax = fig.gca(projection='3d')
+    ax = Axes3D(fig)
     ax.plot(x_val, y_val, z_val, label='Asteroid path')
     ax.legend()
 
