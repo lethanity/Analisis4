@@ -1,5 +1,7 @@
 from sympy import *
+from collections import namedtuple
 import numpy
+import csv
 
 POINTS_FILE = "geo_pos.csv"
 INTERPOLATED_POINTS_FILE = "geo_pos_interpolated.csv"
@@ -8,7 +10,6 @@ INTERPOLATED_POINTS_FILE = "geo_pos_interpolated.csv"
 def lagrange(points):
     """
     :param points: numpy 2-dimensional array [xi,yi]
-    :param variable: Point to eval the function at or None
     :return: a lambda expression that is the function
     """
     x = Symbol("x")
@@ -45,7 +46,7 @@ def interpolate_file():
     latitude_by_height = lagrange(points[:, [0, 1]])
     longitude_by_height = lagrange(points[:, [0, 2]])
     interpolated_points = []
-    for height in range(10000, 0, -1):
+    for height in range(10000, -1, -1):
         interpolated_points.append([height, latitude_by_height(height), longitude_by_height(height)])
     return interpolated_points
 
@@ -53,9 +54,19 @@ def interpolate_file():
 def generate_interpolated_file():
     points = interpolate_file()
     with open(INTERPOLATED_POINTS_FILE, 'wb') as file:
-        file.write(bytes("height, latitude, longitude\n", "UTF-8"))
+        file.write(bytes("height,latitude,longitude\n", "UTF-8"))
         numpy.savetxt(file, points, delimiter=',')
 
 
 def get_interpolated_points():
-    return numpy.genfromtxt(INTERPOLATED_POINTS_FILE, dtype=numpy.float64, delimiter=',', skip_header=1)
+    with open(INTERPOLATED_POINTS_FILE, newline="") as infile:
+        reader = csv.reader(infile)
+        Data = namedtuple("Data", next(reader))
+        return [Data(*value) for value in reader]
+
+
+def get_non_interpolated_points():
+    with open(POINTS_FILE, newline="") as infile:
+        reader = csv.reader(infile)
+        Data = namedtuple("Data", next(reader))
+        return [Data(*value) for value in reader]

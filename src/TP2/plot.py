@@ -20,7 +20,3 @@ def plot_2d(x_val, y_val, x_label, y_label, title):
     plt.ylabel(y_label)
     plt.title(title)
     plt.show()
-
-
-if __name__ == '__main__':
-    plot_2d([1, 2, 3, 4, 5], [2, 3, 4, 5, 6], 'x', 'y', 'x+1')
