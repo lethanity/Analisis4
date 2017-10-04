@@ -1,7 +1,5 @@
 from sympy import *
-from collections import namedtuple
 import numpy
-import csv
 import pandas as pd
 
 POINTS_FILE = "geo_pos.csv"
@@ -77,10 +75,7 @@ def get_non_interpolated_points():
 
 
 def get_points(path):
-    with open(path, newline="") as infile:
-        reader = csv.reader(infile)
-        Data = namedtuple("Data", next(reader))
-        return [Data._make(map(float, value)) for value in reader]
+    return pd.read_csv(path).itertuples()
 
 
 if __name__ == '__main__':
