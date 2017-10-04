@@ -38,8 +38,6 @@ def lagrange(points):
     p = 0
     for i in range(len(points)):
         p = p + l.multiply(points[i, 1])[i]
-    # p = horner(p)
-    # print(p)
     return lambdify(x, p, 'numpy')
 
 
@@ -62,15 +60,6 @@ def interpolate_file():
             interpolated_points.append([height, lat_by_height_fun(height), long_by_height_fun(height)])
     return interpolated_points
 
-    # points = numpy.genfromtxt(POINTS_FILE, dtype=numpy.float64, delimiter=',', skip_header=1)
-    # print(points[:, [0, 1]])
-    # latitude_by_height = lagrange(points[:, [0, 1]])
-    # longitude_by_height = lagrange(points[:, [0, 2]])
-    # interpolated_points = []
-    # for height in range(10000, -1, -1):
-    #     interpolated_points.append([height, latitude_by_height(height), longitude_by_height(height)])
-    # return interpolated_points
-
 
 def generate_interpolated_file():
     points = interpolate_file()
@@ -80,50 +69,19 @@ def generate_interpolated_file():
 
 
 def get_interpolated_points():
-    with open(INTERPOLATED_POINTS_FILE, newline="") as infile:
-        reader = csv.reader(infile)
-        Data = namedtuple("Data", next(reader))
-        return [Data(*value) for value in reader]
+    return get_points(INTERPOLATED_POINTS_FILE)
 
 
 def get_non_interpolated_points():
-    with open(POINTS_FILE, newline="") as infile:
+    return get_points(POINTS_FILE)
+
+
+def get_points(path):
+    with open(path, newline="") as infile:
         reader = csv.reader(infile)
         Data = namedtuple("Data", next(reader))
-        return [Data(*value) for value in reader]
+        return [Data._make(map(float, value)) for value in reader]
 
 
 if __name__ == '__main__':
     generate_interpolated_file()
-    # data = pd.read_csv(POINTS_FILE)
-    # row_num = data.shape[0]
-    # interpolated_points = []
-    # for i in range(0, row_num, LAGRANGE_LIMIT - 1):
-    #     sliced_data = sliced_data = data.iloc[i:i+LAGRANGE_LIMIT]
-    #     latitude_by_height = numpy.column_stack((sliced_data.height, sliced_data.latitude))
-    #     longitude_by_height = numpy.column_stack((sliced_data.height, sliced_data.longitude))
-    #     first = sliced_data.height.iloc[0]
-    #     if sliced_data.shape[0] < LAGRANGE_LIMIT:
-    #         last = -1
-    #     else:
-    #         last = sliced_data.height.iloc[-1]
-    #     lat_by_height_fun = lagrange(latitude_by_height)
-    #     long_by_height_fun = lagrange(longitude_by_height)
-    #     for height in range(first, last, -1):
-    #         interpolated_points.append([height, lat_by_height_fun(height), long_by_height_fun(height)])
-    # return interpolated_points
-
-
-    # points = []
-    # with open(POINTS_FILE, newline="") as infile:
-    #     reader = csv.reader(infile)
-    #     next(reader)  # ignore col names
-    #     for values in reader:
-    #         points.extend(map(float, values))
-    # print(points)
-    # sliced_points = []
-    # for i in range(0, len(points), 9):
-    #     sliced_points.append(points[i:i+10])
-    # for i in sliced_points:
-    #     for height in range(i[len(i)-1], i[0] - 1, -1):
-    #         print(height)

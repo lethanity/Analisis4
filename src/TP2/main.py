@@ -4,8 +4,10 @@ from TP2.plot import *
 
 if __name__ == '__main__':
     points = get_interpolated_points()
-    heights = [float(point.height) for point in points]
-    latitudes = [float(point.latitude) for point in points]
-    longitudes = [float(point.longitude) for point in points]
+    heights = [point.height for point in points]
+    latitudes = [point.latitude for point in points]
+    longitudes = [point.longitude for point in points]
 
-    plot_3d(heights, longitudes, latitudes)
+    plot_2d(heights, longitudes, 'height', 'longitude')
+    plot_2d(heights, latitudes, 'height', 'latitude')
+    plot_3d(longitudes, latitudes, heights, 'longitude', 'latitude', 'height', 'Asteroid Path')
