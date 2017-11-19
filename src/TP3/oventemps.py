@@ -45,4 +45,4 @@ def make_csvs(initial, time_step, n):
 
 if __name__ == '__main__':
     data = pd.read_csv('csv/t0.csv', header=None)
-    make_csvs(data, 1, 10)
+    make_csvs(data, 5, 10)

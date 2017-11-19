@@ -3,9 +3,13 @@ import pandas as pd
 
 
 def map_csv(path):
-    data = pd.read_csv(path).as_matrix()
-    data_norm = (data - data.mean()) / (data.max() - data.min()) # Normalize matrix
-    heatmap = plt.imshow(data_norm, cmap='hot',interpolation='nearest')
-    heatmap.show()
+    data = pd.read_csv(path, header=None).as_matrix()
+    plt.imshow(data, cmap='hot')
+    plt.colorbar()
 
-map_csv('csv/t1.csv')
+
+if __name__ == '__main__':
+    for i in range(0, 11):
+        map_csv('csv/t{}.csv'.format(i))
+        plt.savefig('heatmap/t{}.png'.format(i))
+        plt.clf()
